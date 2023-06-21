@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 describe('AuthController', () => {
   let controller: AuthController;
+  let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -17,9 +18,18 @@ describe('AuthController', () => {
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
+    service = module.get<AuthService>(AuthService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('AuthController', () => {
+    it('Controller should be define', () => {
+      expect(controller).toBeDefined();
+    });
+  });
+
+  describe('AuthService', () => {
+    it('Service should be define', () => {
+      expect(service).toBeDefined();
+    });
   });
 });
