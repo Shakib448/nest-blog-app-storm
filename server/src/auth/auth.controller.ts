@@ -9,15 +9,15 @@ export class AuthController {
 
   @Post('register')
   async Register(@Body() dto: CreateUser, @Res() res: Response) {
-    const token = await this.authService.Register(dto);
+    const { access_token } = await this.authService.Register(dto);
 
-    res.status(200).send({ token });
+    res.status(200).send({ access_token });
   }
 
   @Post('login')
   async Login(@Body() dto: CreateUser, @Res() res: Response) {
-    const token = await this.authService.Login(dto);
+    const { access_token } = await this.authService.Login(dto);
 
-    res.status(200).send({ token });
+    res.status(200).send({ access_token });
   }
 }
