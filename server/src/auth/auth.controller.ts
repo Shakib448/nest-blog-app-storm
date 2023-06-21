@@ -11,13 +11,29 @@ export class AuthController {
   async Register(@Body() dto: CreateUser, @Res() res: Response) {
     const { access_token } = await this.authService.Register(dto);
 
-    res.status(200).send({ access_token });
+    res
+      .cookie('Authorization', access_token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        expires: new Date(Date.now() + 15 * 60 * 1000),
+      })
+      .status(200)
+      .send({ status: 'OK' });
   }
 
   @Post('login')
   async Login(@Body() dto: CreateUser, @Res() res: Response) {
     const { access_token } = await this.authService.Login(dto);
 
-    res.status(200).send({ access_token });
+    res
+      .cookie('Authorization', access_token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        expires: new Date(Date.now() + 15 * 60 * 1000),
+      })
+      .status(200)
+      .send({ status: 'OK' });
   }
 }
