@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private config: ConfigService,
+    private configService: ConfigService,
     private jwt: JwtService,
   ) {}
 
@@ -57,7 +57,7 @@ export class AuthService {
 
     const access_token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
-      secret: this.config.get('JWT_SECRET'),
+      secret: this.configService.get('JWT_SECRET'),
     });
 
     return { access_token };
