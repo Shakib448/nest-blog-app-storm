@@ -21,15 +21,41 @@ describe('AuthController', () => {
     service = module.get<AuthService>(AuthService);
   });
 
-  describe('AuthController', () => {
-    it('Controller should be define', () => {
-      expect(controller).toBeDefined();
-    });
-  });
+  describe('Login', () => {
+    it('should login  and set the authorization cookie', async () => {
+      const access_token = 'dummy_token';
+      jest.spyOn(service, 'Login').mockResolvedValue({ access_token });
 
-  describe('AuthService', () => {
-    it('Service should be define', () => {
-      expect(service).toBeDefined();
+      const res: any = {
+        cookie: jest.fn((name, value, options) => {
+          res.cookieData = { name, value, options };
+          return res;
+        }),
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn().mockReturnThis(),
+      };
+
+      const dto = { email: 'test@example.com', password: 'password' };
+      await controller.Login(dto, res);
+
+      expect(service.Login).toHaveBeenCalledWith(dto);
+
+      expect(res.cookie).toHaveBeenCalledWith('Authorization', access_token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        expires: expect.any(Date),
+      });
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.send).toHaveBeenCalledWith({ status: 'OK' });
+
+      const { name, value, options } = res.cookieData;
+      expect(name).toBe('Authorization');
+      expect(value).toBe(access_token);
+      expect(options.httpOnly).toBe(true);
+      expect(options.secure).toBe(false);
+      expect(options.sameSite).toBe('lax');
+      expect(options.expires).toBeInstanceOf(Date);
     });
   });
 });
