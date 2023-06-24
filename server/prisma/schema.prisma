@@ -13,8 +13,22 @@ model User {
   email    String @unique
   password String
 
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Post      Post[]
 
   @@map("users")
+}
+
+model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
 }
