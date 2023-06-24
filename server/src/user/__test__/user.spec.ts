@@ -18,15 +18,17 @@ describe('UserController', () => {
     service = module.get<UserService>(UserService);
   });
 
-  describe('UserController', () => {
-    it('Controller should be define', () => {
-      expect(controller).toBeDefined();
-    });
-  });
+  describe('getMe', () => {
+    it('should return the user object', async () => {
+      const dummyUser: any = {
+        id: 1,
+        email: 'shakiba448@gmail.com',
+        password: 'password123',
+      };
 
-  describe('UserService', () => {
-    it('Service should be define', () => {
-      expect(service).toBeDefined();
+      const result = controller.getMe(dummyUser);
+
+      expect(result).toEqual(dummyUser);
     });
   });
 });
