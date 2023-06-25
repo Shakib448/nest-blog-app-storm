@@ -19,6 +19,11 @@ export class PostService {
     return newPost;
   }
 
+  async GetPosts() {
+    const posts = await this.prisma.post.findMany();
+    return posts;
+  }
+
   async UpdatePost(dto: UpdatePost, id: number) {
     const updatePost = await this.prisma.post.update({
       where: {
