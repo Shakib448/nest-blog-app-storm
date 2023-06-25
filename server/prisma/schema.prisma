@@ -28,8 +28,24 @@ model Post {
   userId      Int
   user        User   @relation(fields: [userId], references: [id])
 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Comment   Comment[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+
+  username String
+  comment  String
+
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("posts")
+  @@map("comments")
 }
