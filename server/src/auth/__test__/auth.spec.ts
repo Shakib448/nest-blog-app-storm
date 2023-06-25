@@ -34,7 +34,11 @@ describe('AuthController', () => {
         send: jest.fn().mockReturnThis(),
       };
 
-      const dto = { email: 'test@example.com', password: 'password' };
+      const dto = {
+        username: 'testname',
+        email: 'test@example.com',
+        password: 'password',
+      };
       await authController.Register(dto, res);
 
       expect(authService.Register).toHaveBeenCalledWith(dto);
@@ -72,7 +76,11 @@ describe('AuthController', () => {
         send: jest.fn().mockReturnThis(),
       };
 
-      const dto = { email: 'test@example.com', password: 'password' };
+      const dto = {
+        username: 'dummy_name',
+        email: 'test@example.com',
+        password: 'password',
+      };
       await authController.Login(dto, res);
 
       expect(authService.Login).toHaveBeenCalledWith(dto);
