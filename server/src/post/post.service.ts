@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePost, UpdatePost } from './dto';
 import { User } from '@prisma/client';
@@ -33,5 +33,18 @@ export class PostService {
     });
 
     return updatePost;
+  }
+
+  async DeletePost(user: User, id: number) {
+    const post = await this.prisma.post.findUnique({ where: { id } });
+
+    if (!post) throw new ForbiddenException('Post not found!');
+
+    if (post.userId !== user.id)
+      throw new ForbiddenException('Access to resources denied');
+
+    await this.prisma.post.delete({ where: { id } });
+
+    return { message: 'Post deleted successfully' };
   }
 }

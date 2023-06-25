@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -33,5 +36,12 @@ export class PostController {
   @Patch('update/:id')
   UpdatePost(@Body() dto: UpdatePost, @Param('id', ParseIntPipe) id: number) {
     return this.postService.UpdatePost(dto, id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('delete/:id')
+  @HttpCode(HttpStatus.OK)
+  DeletePost(@GetUser() user: User, @Param('id', ParseIntPipe) id: number) {
+    return this.postService.DeletePost(user, id);
   }
 }
