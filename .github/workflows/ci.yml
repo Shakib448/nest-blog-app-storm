@@ -1,16 +1,13 @@
-name: Server CI
+name: CI
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  build:
+  server:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Node.js
@@ -19,7 +16,9 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
+        working-directory: server
         run: npm install
 
-      - name: Run tests
+      - name: Run server tests
+        working-directory: server
         run: npm run test
