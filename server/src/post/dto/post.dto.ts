@@ -13,3 +13,13 @@ export class CreatePost {
   @IsInt()
   userId: Number;
 }
+
+export class UpdatePost {
+  @IsNotEmpty()
+  @IsString()
+  title: string;
+
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+}
