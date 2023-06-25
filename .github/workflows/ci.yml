@@ -6,6 +6,10 @@ jobs:
   server:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET}}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
