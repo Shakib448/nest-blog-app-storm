@@ -20,15 +20,24 @@ export class PostService {
   }
 
   async GetPosts() {
-    const posts = await this.prisma.post.findMany();
+    const posts = await this.prisma.post.findMany({
+      include: {
+        user: {
+          select: {
+            username: true,
+            email: true,
+          },
+        },
+        comment: true,
+      },
+    });
+
     return posts;
   }
 
   async UpdatePost(dto: UpdatePost, id: number) {
     const updatePost = await this.prisma.post.update({
-      where: {
-        id,
-      },
+      where: { id },
       data: dto,
     });
 
@@ -43,7 +52,8 @@ export class PostService {
     if (post.userId !== user.id)
       throw new ForbiddenException('Access to resources denied');
 
-    await this.prisma.post.delete({ where: { id } });
+    await this.prisma.comment.deleteMany({ where: { postId: post.id } });
+    await this.prisma.post.delete({ where: { id: post.id } });
 
     return { message: 'Post deleted successfully' };
   }

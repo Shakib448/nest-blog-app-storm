@@ -14,9 +14,10 @@ model User {
   email    String @unique
   password String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   post      Post[]
+  comment   Comment[]
 
   @@map("users")
 }
@@ -30,7 +31,7 @@ model Post {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Comment   Comment[]
+  comment   Comment[]
 
   @@map("posts")
 }
@@ -43,6 +44,8 @@ model Comment {
 
   postId Int
   post   Post @relation(fields: [postId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
