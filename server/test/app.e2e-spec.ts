@@ -4,10 +4,16 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDtoLogin, AuthDtoRegister } from '../src/auth/dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { CreatePost } from 'src/post/dto';
+import * as cookieParser from 'cookie-parser';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let jwt: JwtService;
+  let config: ConfigService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -21,9 +27,16 @@ describe('AppController (e2e)', () => {
         whitelist: true,
       }),
     );
+    app.use(cookieParser());
 
     prisma = app.get(PrismaService);
+    jwt = app.get(JwtService);
+    config = app.get(ConfigService);
     await prisma.cleanDb();
+  });
+
+  afterAll(() => {
+    app.close();
   });
 
   describe('E2E testing Authentication', () => {
@@ -65,5 +78,44 @@ describe('AppController (e2e)', () => {
     });
   });
 
-  describe('E2E testing with post', () => {});
+  // describe('E2E testing with post', () => {
+  //   it('Should create new post as an authenticate user', async () => {
+  //     const user: AuthDtoLogin = {
+  //       email: 'shakiba448@gmail.com',
+  //       password: 'shakib7023',
+  //     };
+
+  //     const userRes = await request(app.getHttpServer())
+  //       .post('/auth/login')
+  //       .send(user)
+  //       .expect(200);
+
+  //     const token = userRes.headers['set-cookie'][0]
+  //       .split(';')[0]
+  //       .split('=')[1];
+
+  //     const { sub } = jwt.verify(token, {
+  //       secret: config.get('JWT_SECRET'),
+  //     });
+
+  //     const createPost: CreatePost = {
+  //       title: 'The test title',
+  //       description: 'The test description',
+  //       userId: sub,
+  //     };
+
+  //     const Cookie = userRes.get('Set-Cookie');
+
+  //     const response = await request(app.getHttpServer())
+  //       .post('/post/create')
+  //       .set('Cookie', Cookie)
+  //       .send(createPost)
+  //       .expect(200);
+
+  //     expect(response.body).toBeDefined();
+  //     expect(response.body.title).toEqual(createPost.title);
+  //     expect(response.body.description).toEqual(createPost.description);
+  //     expect(response.body.userId).toBeDefined();
+  //   });
+  // });
 });
