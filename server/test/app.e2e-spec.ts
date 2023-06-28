@@ -136,5 +136,98 @@ describe('AppController (e2e)', () => {
       expect(response.body.description).toEqual(createPost.description);
       expect(response.body.userId).toBeDefined();
     });
+
+    it('Should update a post as an authenticate user', async () => {
+      const user: AuthDtoLogin = {
+        email: 'shakiba448@gmail.com',
+        password: 'shakib7023',
+      };
+
+      const userRes = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send(user)
+        .expect(200);
+
+      const token = userRes.headers['set-cookie'][0]
+        .split(';')[0]
+        .split('=')[1];
+
+      const { sub } = jwt.verify(token, {
+        secret: config.get('JWT_SECRET'),
+      });
+
+      const createPost: CreatePost = {
+        title: 'The test title updated',
+        description: 'The test description updated',
+        userId: sub,
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/post/create')
+        .set('Authorization', token)
+        .send(createPost)
+        .expect(201);
+
+      const updatePost = await request(app.getHttpServer())
+        .patch(`/post/update/${response.body.id}`)
+        .set('Authorization', token)
+        .send(createPost)
+        .expect(200);
+
+      expect(updatePost.body).toBeDefined();
+      expect(updatePost.body.title).toEqual(createPost.title);
+      expect(updatePost.body.description).toEqual(createPost.description);
+      expect(updatePost.body.userId).toBeDefined();
+    });
+
+    it('Should get all posts', async () => {
+      const getPosts = await request(app.getHttpServer())
+        .get('/post')
+        .expect(200);
+
+      expect(getPosts.body).toBeDefined();
+      expect(Array.isArray(getPosts.body)).toBe(true);
+    });
+
+    it('Should delete a post as an authenticate user', async () => {
+      const user: AuthDtoLogin = {
+        email: 'shakiba448@gmail.com',
+        password: 'shakib7023',
+      };
+
+      const userRes = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send(user)
+        .expect(200);
+
+      const token = userRes.headers['set-cookie'][0]
+        .split(';')[0]
+        .split('=')[1];
+
+      const { sub } = jwt.verify(token, {
+        secret: config.get('JWT_SECRET'),
+      });
+
+      const createPost: CreatePost = {
+        title: 'The test title updated',
+        description: 'The test description updated',
+        userId: sub,
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/post/create')
+        .set('Authorization', token)
+        .send(createPost)
+        .expect(201);
+
+      const deletePost = await request(app.getHttpServer())
+        .delete(`/post/delete/${response.body.id}`)
+        .set('Authorization', token)
+        .send(createPost)
+        .expect(200);
+
+      expect(deletePost.body).toBeDefined();
+      expect(deletePost.body.message).toBe('Post deleted successfully');
+    });
   });
 });
