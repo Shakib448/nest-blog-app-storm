@@ -21,6 +21,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (req.cookies && req.cookies['Authorization']) {
       return req.cookies['Authorization'];
     }
+
+    // Test case
+    if (req.headers['authorization']) {
+      return req.headers['authorization'];
+    }
     return null;
   }
 
