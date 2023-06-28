@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { CreatePost } from '../src/post/dto';
 import * as cookieParser from 'cookie-parser';
+import { CreateComment } from '../src/comment/dto';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -39,7 +40,7 @@ describe('AppController (e2e)', () => {
     app.close();
   });
 
-  describe('E2E testing Authentication', () => {
+  describe('E2E testing with authentication', () => {
     it('Should register a user', async () => {
       const user: AuthDtoRegister = {
         username: 'Muktadir',
@@ -78,7 +79,7 @@ describe('AppController (e2e)', () => {
     });
   });
 
-  describe('Get user info', () => {
+  describe('E2E testing with user', () => {
     it('Should return user info', async () => {
       const user: AuthDtoLogin = {
         email: 'shakiba448@gmail.com',
@@ -223,11 +224,125 @@ describe('AppController (e2e)', () => {
       const deletePost = await request(app.getHttpServer())
         .delete(`/post/delete/${response.body.id}`)
         .set('Authorization', token)
-        .send(createPost)
         .expect(200);
 
       expect(deletePost.body).toBeDefined();
       expect(deletePost.body.message).toBe('Post deleted successfully');
+    });
+  });
+
+  describe('E2E testing with comment', () => {
+    it('Should create a new comment', async () => {
+      const user: AuthDtoLogin = {
+        email: 'shakiba448@gmail.com',
+        password: 'shakib7023',
+      };
+
+      const userRes = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send(user)
+        .expect(200);
+
+      const token = userRes.headers['set-cookie'][0]
+        .split(';')[0]
+        .split('=')[1];
+
+      const { sub, username } = jwt.verify(token, {
+        secret: config.get('JWT_SECRET'),
+      });
+
+      const createPost: CreatePost = {
+        title: 'The test title updated',
+        description: 'The test description updated',
+        userId: sub,
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/post/create')
+        .set('Authorization', token)
+        .send(createPost)
+        .expect(201);
+
+      const createComment: CreateComment = {
+        username,
+        comment: 'This is a comment',
+        userId: sub,
+        postId: response.body.id,
+      };
+
+      const comment = await request(app.getHttpServer())
+        .post(`/comment/create/${response.body.id}`)
+        .set('Authorization', token)
+        .send(createComment)
+        .expect(201);
+
+      expect(comment.body).toBeDefined();
+      expect(comment.body.username).toBeDefined();
+      expect(comment.body.comment).toBeDefined();
+      expect(comment.body.userId).toBeDefined();
+      expect(comment.body.postId).toBeDefined();
+    });
+
+    it('Should get all comments', async () => {
+      const getComments = await request(app.getHttpServer())
+        .get('/comment')
+        .expect(200);
+
+      expect(getComments.body).toBeDefined();
+      expect(Array.isArray(getComments.body)).toBe(true);
+    });
+
+    it('Should delete a comment as an authenticate user', async () => {
+      const user: AuthDtoLogin = {
+        email: 'shakiba448@gmail.com',
+        password: 'shakib7023',
+      };
+
+      const userRes = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send(user)
+        .expect(200);
+
+      const token = userRes.headers['set-cookie'][0]
+        .split(';')[0]
+        .split('=')[1];
+
+      const { sub, username } = jwt.verify(token, {
+        secret: config.get('JWT_SECRET'),
+      });
+
+      const createPost: CreatePost = {
+        title: 'The test title updated',
+        description: 'The test description updated',
+        userId: sub,
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/post/create')
+        .set('Authorization', token)
+        .send(createPost)
+        .expect(201);
+
+      const createComment: CreateComment = {
+        username,
+        comment: 'This is a comment',
+        userId: sub,
+        postId: response.body.id,
+      };
+
+      const comment = await request(app.getHttpServer())
+        .post(`/comment/create/${response.body.id}`)
+        .set('Authorization', token)
+        .send(createComment)
+        .expect(201);
+
+      const deleteComment = await request(app.getHttpServer())
+        .delete(`/comment/delete/${comment.body.id}`)
+        .set('Authorization', token)
+        .expect(200);
+
+      expect(deleteComment.body).toBeDefined();
+      expect(deleteComment.body.message).toBe('Comment deleted successfully');
     });
   });
 });
