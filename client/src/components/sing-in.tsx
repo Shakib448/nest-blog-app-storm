@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import instance from "@/utils/BaseURL";
+import { signIn } from "next-auth/react";
 
 type Inputs = {
   email: string;
@@ -35,11 +36,12 @@ const SingIn = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     try {
-      const res: any = await SignInMutation.mutateAsync(formData as any);
+      await signIn("credentials", { ...formData, callbackUrl: "/posts" });
+      // const res: any = await SignInMutation.mutateAsync(formData as any);
 
-      if (res?.data?.status === "OK") {
-        router.push("/posts");
-      }
+      // if (res?.data?.status === "OK") {
+      //   router.push("/posts");
+      // }
     } catch (error: any) {
       toast.error(error.response?.data?.message);
     }

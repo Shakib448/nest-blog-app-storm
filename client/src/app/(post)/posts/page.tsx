@@ -1,11 +1,6 @@
 import React from "react";
-import { cookies } from "next/headers";
 
 const Posts = () => {
-  const cookieStore = cookies();
-  const token: any = cookieStore.get("Authorization");
-
-  console.log({ token: token.value });
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md text-center">
