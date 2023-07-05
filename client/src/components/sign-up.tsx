@@ -5,6 +5,10 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import instance from "@/utils/BaseURL";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 type Inputs = {
   username: string;
@@ -21,7 +25,27 @@ const SingUp = () => {
   } = useForm<Inputs, any>({
     resolver: yupResolver(signUpSchema) as any,
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  const router = useRouter();
+
+  const SignUpMutation = useMutation({
+    mutationFn: async (formData) => {
+      const data = await instance.post("/auth/register", formData);
+      return data;
+    },
+  });
+
+  const onSubmit: SubmitHandler<Inputs> = async (formData) => {
+    try {
+      const res: any = await SignUpMutation.mutateAsync(formData as any);
+
+      if (res?.data?.status === "OK") {
+        router.push("/posts");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message);
+    }
+  };
 
   return (
     <div className="bg-gray 100">
@@ -88,7 +112,7 @@ const SingUp = () => {
               </label>
               <input
                 className="w-full px-3 py-2 border border-gray-300 rounded"
-                type="confirmPassword"
+                type="password"
                 id="confirmPassword"
                 placeholder="Enter your confirmPassword"
                 {...register("confirmPassword")}
