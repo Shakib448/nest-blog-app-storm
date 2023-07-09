@@ -91,11 +91,9 @@ describe('AppController (e2e)', () => {
         .send(user)
         .expect(200);
 
-      const token = res.headers['set-cookie'][0].split(';')[0].split('=')[1];
-
       await request(app.getHttpServer())
         .get('/user/me')
-        .set('Authorization', token)
+        .set('Authorization', res.body.access_token)
         .expect(200);
     });
   });
@@ -112,11 +110,7 @@ describe('AppController (e2e)', () => {
         .send(user)
         .expect(200);
 
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
-      const { sub } = jwt.verify(token, {
+      const { sub } = jwt.verify(userRes.body.access_token, {
         secret: config.get('JWT_SECRET'),
       });
 
@@ -128,7 +122,7 @@ describe('AppController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createPost)
         .expect(201);
 
@@ -149,11 +143,7 @@ describe('AppController (e2e)', () => {
         .send(user)
         .expect(200);
 
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
-      const { sub } = jwt.verify(token, {
+      const { sub } = jwt.verify(userRes.body.access_token, {
         secret: config.get('JWT_SECRET'),
       });
 
@@ -165,13 +155,13 @@ describe('AppController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createPost)
         .expect(201);
 
       const updatePost = await request(app.getHttpServer())
         .patch(`/post/update/${response.body.id}`)
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createPost)
         .expect(200);
 
@@ -201,11 +191,7 @@ describe('AppController (e2e)', () => {
         .send(user)
         .expect(200);
 
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
-      const { sub } = jwt.verify(token, {
+      const { sub } = jwt.verify(userRes.body.access_token, {
         secret: config.get('JWT_SECRET'),
       });
 
@@ -217,13 +203,13 @@ describe('AppController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createPost)
         .expect(201);
 
       const deletePost = await request(app.getHttpServer())
         .delete(`/post/delete/${response.body.id}`)
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .expect(200);
 
       expect(deletePost.body).toBeDefined();
@@ -243,11 +229,7 @@ describe('AppController (e2e)', () => {
         .send(user)
         .expect(200);
 
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
-      const { sub, username } = jwt.verify(token, {
+      const { sub, username } = jwt.verify(userRes.body.access_token, {
         secret: config.get('JWT_SECRET'),
       });
 
@@ -259,7 +241,7 @@ describe('AppController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createPost)
         .expect(201);
 
@@ -272,7 +254,7 @@ describe('AppController (e2e)', () => {
 
       const comment = await request(app.getHttpServer())
         .post(`/comment/create/${response.body.id}`)
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createComment)
         .expect(201);
 
@@ -303,11 +285,7 @@ describe('AppController (e2e)', () => {
         .send(user)
         .expect(200);
 
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
-      const { sub, username } = jwt.verify(token, {
+      const { sub, username } = jwt.verify(userRes.body.access_token, {
         secret: config.get('JWT_SECRET'),
       });
 
@@ -319,7 +297,7 @@ describe('AppController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createPost)
         .expect(201);
 
@@ -332,13 +310,13 @@ describe('AppController (e2e)', () => {
 
       const comment = await request(app.getHttpServer())
         .post(`/comment/create/${response.body.id}`)
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .send(createComment)
         .expect(201);
 
       const deleteComment = await request(app.getHttpServer())
         .delete(`/comment/delete/${comment.body.id}`)
-        .set('Authorization', token)
+        .set('Authorization', userRes.body.access_token)
         .expect(200);
 
       expect(deleteComment.body).toBeDefined();

@@ -25,40 +25,14 @@ describe('AuthController', () => {
       const access_token = 'dummy_token';
       jest.spyOn(authService, 'Register').mockResolvedValue({ access_token });
 
-      const res: any = {
-        cookie: jest.fn((name, value, options) => {
-          res.cookieData = { name, value, options };
-          return res;
-        }),
-        status: jest.fn().mockReturnThis(),
-        send: jest.fn().mockReturnThis(),
-      };
-
       const dto = {
         username: 'testname',
         email: 'test@example.com',
         password: 'password',
       };
-      await authController.Register(dto, res);
+      await authController.Register(dto);
 
       expect(authService.Register).toHaveBeenCalledWith(dto);
-
-      expect(res.cookie).toHaveBeenCalledWith('Authorization', access_token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-        expires: expect.any(Date),
-      });
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.send).toHaveBeenCalledWith({ status: 'OK' });
-
-      const { name, value, options } = res.cookieData;
-      expect(name).toBe('Authorization');
-      expect(value).toBe(access_token);
-      expect(options.httpOnly).toBe(true);
-      expect(options.secure).toBe(false);
-      expect(options.sameSite).toBe('lax');
-      expect(options.expires).toBeInstanceOf(Date);
     });
   });
 
@@ -67,40 +41,14 @@ describe('AuthController', () => {
       const access_token = 'dummy_token';
       jest.spyOn(authService, 'Login').mockResolvedValue({ access_token });
 
-      const res: any = {
-        cookie: jest.fn((name, value, options) => {
-          res.cookieData = { name, value, options };
-          return res;
-        }),
-        status: jest.fn().mockReturnThis(),
-        send: jest.fn().mockReturnThis(),
-      };
-
       const dto = {
         username: 'dummy_name',
         email: 'test@example.com',
         password: 'password',
       };
-      await authController.Login(dto, res);
+      await authController.Login(dto);
 
       expect(authService.Login).toHaveBeenCalledWith(dto);
-
-      expect(res.cookie).toHaveBeenCalledWith('Authorization', access_token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-        expires: expect.any(Date),
-      });
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.send).toHaveBeenCalledWith({ status: 'OK' });
-
-      const { name, value, options } = res.cookieData;
-      expect(name).toBe('Authorization');
-      expect(value).toBe(access_token);
-      expect(options.httpOnly).toBe(true);
-      expect(options.secure).toBe(false);
-      expect(options.sameSite).toBe('lax');
-      expect(options.expires).toBeInstanceOf(Date);
     });
   });
 });
