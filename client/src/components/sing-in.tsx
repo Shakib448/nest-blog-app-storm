@@ -36,11 +36,11 @@ const SingIn = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     try {
-      const res: any = await SignInMutation.mutateAsync(formData as any);
+      // const res: any = await SignInMutation.mutateAsync(formData as any);
 
-      if (res?.data?.status === "OK") {
-        router.push("/posts");
-      }
+      const res = await signIn("credentials", { ...formData });
+
+      console.log(res);
     } catch (error: any) {
       toast.error(error.response?.data?.message);
     }

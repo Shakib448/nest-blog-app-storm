@@ -1,27 +1,39 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDtoLogin, AuthDtoRegister } from './dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  @HttpCode(HttpStatus.OK)
-  async Register(@Body() dto: AuthDtoRegister) {
-    return this.authService.Register(dto);
+  async Register(@Body() dto: AuthDtoRegister, @Res() res: Response) {
+    const { access_token } = await this.authService.Register(dto);
+
+    res
+      .cookie('Authorization', access_token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      })
+      .status(200)
+      .send({ access_token });
   }
 
   @Post('login')
-  @HttpCode(HttpStatus.OK)
-  async Login(@Body() dto: AuthDtoLogin) {
-    return this.authService.Login(dto);
+  async Login(@Body() dto: AuthDtoLogin, @Res() res: Response) {
+    const data = await this.authService.Login(dto);
+
+    res
+      .cookie('Authorization', data.user.access_token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      })
+      .status(200)
+      .send(data);
   }
 }

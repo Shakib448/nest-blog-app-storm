@@ -1,15 +1,19 @@
+"use client";
+
 import instance from "@/utils/BaseURL";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
-const { data } = useQuery({
-  queryKey: ["user"],
-  queryFn: async () => {
-    const { data } = await instance.get("/user/me");
-    return data;
-  },
-});
 const PostComponent = () => {
+  const { data } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const { data } = await instance.get("/user/me");
+      return data;
+    },
+  });
+
+  console.log({ data });
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md text-center">
