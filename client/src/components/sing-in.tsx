@@ -1,11 +1,12 @@
-"use client";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { signInSchema } from "@/schema/sign-in.schema";
 import { toast } from "react-toastify";
-import { signIn } from "next-auth/react";
+import { useMutation } from "@tanstack/react-query";
+import instance from "@/utils/BaseURL";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -20,10 +21,20 @@ const SingIn = () => {
   } = useForm<Inputs, any>({
     resolver: yupResolver(signInSchema) as any,
   });
+  const SignInMutation = useMutation({
+    mutationFn: async (formData) => {
+      const { data } = await instance.post("/auth/login", formData);
+      return data;
+    },
+  });
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     try {
-      await signIn("credentials", { ...formData });
+      const res = await SignInMutation.mutateAsync(formData as any);
+      if (res) {
+        router.push("/profile");
+      }
     } catch (error: any) {
       toast.error(error.response?.data?.message);
     }

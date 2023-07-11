@@ -14,7 +14,7 @@ export class AuthController {
     res
       .cookie('Authorization', access_token, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: 'lax',
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       })
@@ -29,7 +29,7 @@ export class AuthController {
     res
       .cookie('Authorization', data.user.access_token, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: 'lax',
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       })

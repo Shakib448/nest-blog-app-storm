@@ -1,3 +1,5 @@
+"use client";
+
 import SingUp from "@/components/sign-up";
 import React from "react";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import SingIn from "@/components/sing-in";
 import React from "react";
 

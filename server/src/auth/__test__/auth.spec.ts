@@ -45,7 +45,7 @@ describe('AuthController', () => {
 
       expect(res.cookie).toHaveBeenCalledWith('Authorization', access_token, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: 'lax',
         expires: expect.any(Date),
       });
@@ -55,7 +55,7 @@ describe('AuthController', () => {
       expect(name).toBe('Authorization');
       expect(value).toBe(access_token);
       expect(options.httpOnly).toBe(true);
-      expect(options.secure).toBe(false);
+      expect(options.secure).toBe(true);
       expect(options.sameSite).toBe('lax');
       expect(options.expires).toBeInstanceOf(Date);
     });
@@ -94,7 +94,7 @@ describe('AuthController', () => {
         user.access_token,
         {
           httpOnly: true,
-          secure: false,
+          secure: true,
           sameSite: 'lax',
           expires: expect.any(Date),
         },
@@ -105,7 +105,7 @@ describe('AuthController', () => {
       expect(name).toBe('Authorization');
       expect(value).toBe(user.access_token);
       expect(options.httpOnly).toBe(true);
-      expect(options.secure).toBe(false);
+      expect(options.secure).toBe(true);
       expect(options.sameSite).toBe('lax');
       expect(options.expires).toBeInstanceOf(Date);
     });

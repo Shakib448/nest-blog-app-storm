@@ -1,25 +1,13 @@
-import { getToken } from "next-auth/jwt";
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export default withAuth(
-  async function middleware(req) {
-    const token = await getToken({ req });
-    const isAuth = !!token;
+export function middleware(request: NextRequest) {
+  const isAuth = request.cookies.get("Authorization");
 
-    if (!isAuth) {
-      return NextResponse.redirect(new URL(`/sign-in`, req.url));
-    }
-  },
-  {
-    callbacks: {
-      authorized() {
-        return true;
-      },
-    },
+  if (!isAuth) {
+    return NextResponse.redirect(new URL(`/sign-in`, request.url));
   }
-);
+}
 
 export const config = {
-  matcher: ["/posts"],
+  matcher: ["/profile"],
 };
