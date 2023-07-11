@@ -35,12 +35,6 @@ const providers = [
 ];
 
 const callbacks = {
-  async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-    if (url.startsWith("/")) return `${baseUrl}${url}`;
-    else if (new URL(url).origin === baseUrl) return url;
-    return baseUrl;
-  },
-
   async jwt({ token, user }: { token: JWT; user: any }) {
     if (user) {
       token.accessToken = user?.result?.access_token;
@@ -64,10 +58,8 @@ const callbacks = {
 export const authOptions: NextAuthOptions = {
   providers,
   callbacks,
-  secret: "Supersecret",
   session: {
     strategy: "jwt",
-    maxAge: 3 * 24 * 60 * 60,
   },
   pages: {
     signIn: "/sign-in",

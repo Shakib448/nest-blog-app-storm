@@ -3,7 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { NextAuthProvider } from "./provider";
+import { NextAuthProvider } from "../lib/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 

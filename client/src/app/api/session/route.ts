@@ -20,12 +20,12 @@ export async function GET(request: Request) {
     })
   );
 
-  // response.headers.append(
-  //   "Set-Cookie",
-  //   `Authorization=${authToken}; HttpOnly; Secure; Path=/; SameSite=Lax; Expires=${new Date(
-  //     Date.now() + 3 * 24 * 60 * 60 * 1000
-  //   ).toUTCString()}`
-  // );
+  response.headers.append(
+    "Set-Cookie",
+    `Authorization=${authToken}; HttpOnly; Secure; Path=/; SameSite=Lax; Expires=${new Date(
+      Date.now() + 3 * 24 * 60 * 60 * 1000
+    ).toUTCString()}`
+  );
 
   return response;
 }
