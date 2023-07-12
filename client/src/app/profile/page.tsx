@@ -1,10 +1,10 @@
 "use client";
 
 import PostComponent from "@/components/posts";
-import React from "react";
+import WithSession from "@/utils/HOC/uesSessionEvents";
 
 const ProfilePage = () => {
   return <PostComponent />;
 };
 
-export default ProfilePage;
+export default WithSession(ProfilePage);
