@@ -27,7 +27,7 @@ export class AuthService {
       data: { ...dto, password: hash },
     });
 
-    return { access_token: await this.tokenCreate(newUser.id, newUser.email) };
+    return this.tokenCreate(newUser.id, newUser.email);
   }
   async Login(dto: AuthDtoLogin) {
     const user = await this.prisma.user.findUnique({
@@ -43,19 +43,13 @@ export class AuthService {
     if (!passwordMatch)
       throw new ForbiddenException('Incorrect password written!');
 
-    delete user.password;
-    delete user.createdAt;
-    delete user.updatedAt;
-
-    return {
-      user: {
-        ...user,
-        access_token: await this.tokenCreate(user.id, user.email),
-      },
-    };
+    return this.tokenCreate(user.id, user.email);
   }
 
-  async tokenCreate(userId: number, email: string) {
+  async tokenCreate(
+    userId: number,
+    email: string,
+  ): Promise<{ access_token: string }> {
     const payload = {
       sub: userId,
       email,
@@ -66,6 +60,6 @@ export class AuthService {
       secret: this.configService.get('JWT_SECRET'),
     });
 
-    return access_token;
+    return { access_token };
   }
 }

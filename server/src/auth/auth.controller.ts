@@ -19,21 +19,21 @@ export class AuthController {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       })
       .status(200)
-      .send({ access_token });
+      .send({ status: 'OK' });
   }
 
   @Post('login')
   async Login(@Body() dto: AuthDtoLogin, @Res() res: Response) {
-    const data = await this.authService.Login(dto);
+    const { access_token } = await this.authService.Login(dto);
 
     res
-      .cookie('Authorization', data.user.access_token, {
+      .cookie('Authorization', access_token, {
         httpOnly: true,
         secure: true,
         sameSite: 'lax',
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       })
       .status(200)
-      .send(data);
+      .send({ status: 'OK' });
   }
 }

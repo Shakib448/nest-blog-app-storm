@@ -63,13 +63,8 @@ describe('AuthController', () => {
 
   describe('Login', () => {
     it('should log in a user and set the authorization cookie', async () => {
-      const user: any = {
-        id: 1,
-        username: 'test',
-        email: 'test@email.com',
-        access_token: 'dummy_token',
-      };
-      jest.spyOn(authService, 'Login').mockResolvedValue({ user });
+      const access_token = 'dummy_token';
+      jest.spyOn(authService, 'Login').mockResolvedValue({ access_token });
 
       const res: any = {
         cookie: jest.fn((name, value, options) => {
@@ -89,21 +84,17 @@ describe('AuthController', () => {
 
       expect(authService.Login).toHaveBeenCalledWith(dto);
 
-      expect(res.cookie).toHaveBeenCalledWith(
-        'Authorization',
-        user.access_token,
-        {
-          httpOnly: true,
-          secure: true,
-          sameSite: 'lax',
-          expires: expect.any(Date),
-        },
-      );
+      expect(res.cookie).toHaveBeenCalledWith('Authorization', access_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+        expires: expect.any(Date),
+      });
       expect(res.status).toHaveBeenCalledWith(200);
 
       const { name, value, options } = res.cookieData;
       expect(name).toBe('Authorization');
-      expect(value).toBe(user.access_token);
+      expect(value).toBe(access_token);
       expect(options.httpOnly).toBe(true);
       expect(options.secure).toBe(true);
       expect(options.sameSite).toBe('lax');
