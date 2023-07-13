@@ -10,13 +10,4 @@ instance.interceptors.response.use(
   (error) => Promise.reject(error.response.data.err)
 );
 
-// instance.interceptors.response.use(
-//   function (response) {
-//     return response;
-//   },
-//   function (error) {
-//     return Promise.reject(error);
-//   }
-// );
-
 export default instance;
