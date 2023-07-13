@@ -1,10 +1,8 @@
-"use client";
-
-import SingUp from "@/components/sign-up";
+import PostComponent from "@/components/posts";
 import React from "react";
 
 const RootPage = () => {
-  return <SingUp />;
+  return <PostComponent />;
 };
 
 export default RootPage;
