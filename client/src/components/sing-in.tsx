@@ -32,7 +32,6 @@ const SingIn = () => {
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     try {
       const res = await SignInMutation.mutateAsync(formData as any);
-
       if (res) {
         router.push("/profile");
       }
@@ -84,14 +83,11 @@ const SingIn = () => {
               className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               type="submit"
             >
-              Sign up
+              Sign in
             </button>
 
             <div className="mt-2 text-center">
               <Link href="/">Not have an any account?</Link>
-            </div>
-            <div className="mt-2 text-center">
-              <Link href="/profile">Profile</Link>
             </div>
           </form>
         </div>

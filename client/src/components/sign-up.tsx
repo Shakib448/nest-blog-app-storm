@@ -37,8 +37,8 @@ const SingUp = () => {
     try {
       const res: any = await SignUpMutation.mutateAsync(formData as any);
 
-      if (res?.data?.status === "OK") {
-        router.push("/posts");
+      if (res) {
+        router.push("/profile");
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message);
