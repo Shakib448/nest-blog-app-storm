@@ -29,6 +29,7 @@ export class AuthService {
 
     return this.tokenCreate(newUser.id, newUser.email);
   }
+
   async Login(dto: AuthDtoLogin) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -36,12 +37,15 @@ export class AuthService {
       },
     });
 
-    if (!user) throw new ForbiddenException('Incorrect email address!');
+    if (!user) {
+      throw new ForbiddenException('Incorrect email address!');
+    }
 
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
 
-    if (!passwordMatch)
+    if (!passwordMatch) {
       throw new ForbiddenException('Incorrect password written!');
+    }
 
     return this.tokenCreate(user.id, user.email);
   }

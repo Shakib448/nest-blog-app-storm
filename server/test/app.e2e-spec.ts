@@ -72,10 +72,12 @@ describe('AppController (e2e)', () => {
         password: 'shakib70',
       };
 
-      await request(app.getHttpServer())
+      const res = await request(app.getHttpServer())
         .post('/auth/login')
         .send(user)
         .expect(403);
+
+      expect(res.body.error).toBe('Forbidden');
     });
   });
 
@@ -342,6 +344,13 @@ describe('AppController (e2e)', () => {
 
       expect(deleteComment.body).toBeDefined();
       expect(deleteComment.body.message).toBe('Comment deleted successfully');
+    });
+  });
+
+  describe('Logout E2E', () => {
+    it('should log out work', async () => {
+      const res = await request(app.getHttpServer()).post('/auth/logout');
+      expect(res.body.message).toBe('Log out successfully');
     });
   });
 });
