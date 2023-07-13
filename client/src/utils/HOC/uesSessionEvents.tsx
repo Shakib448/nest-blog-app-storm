@@ -1,27 +1,41 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const WithSession = <P extends object>(
   WrappedComponent: React.ComponentType<P>
 ) => {
   const WithSession: React.FC<P> = (props) => {
+    const router = useRouter();
     useEffect(() => {
       const handleClick = async () => {
-        await axios.get("/api/getToken");
+        const { data } = await axios.get("/api/getToken");
+        if (!data.authenticated) {
+          router.push("/sign-in");
+        }
       };
 
       const handleKeyDown = async () => {
-        await axios.get("/api/getToken");
+        const { data } = await axios.get("/api/getToken");
+        if (!data.authenticated) {
+          router.push("/sign-in");
+        }
       };
 
       const handleScroll = async () => {
-        await axios.get("/api/getToken");
+        const { data } = await axios.get("/api/getToken");
+        if (!data.authenticated) {
+          router.push("/sign-in");
+        }
       };
 
       const handleLoad = async () => {
-        await axios.get("/api/getToken");
+        const { data } = await axios.get("/api/getToken");
+        if (!data.authenticated) {
+          router.push("/sign-in");
+        }
       };
 
       window.addEventListener("click", handleClick);

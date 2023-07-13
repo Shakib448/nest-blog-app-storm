@@ -21,23 +21,24 @@ const SingIn = () => {
   } = useForm<Inputs, any>({
     resolver: yupResolver(signInSchema) as any,
   });
+
+  const router = useRouter();
+
   const SignInMutation = useMutation({
     mutationFn: async (formData) => {
       const { data } = await instance.post("/auth/login", formData);
       return data;
     },
+    onSuccess: () => {
+      router.push("/profile");
+    },
+    onError: () => {
+      toast.error("Invalid credentials!");
+    },
   });
-  const router = useRouter();
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
-    try {
-      const res = await SignInMutation.mutateAsync(formData as any);
-      if (res) {
-        router.push("/profile");
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message);
-    }
+    await SignInMutation.mutateAsync(formData as any);
   };
 
   return (

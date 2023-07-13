@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import { signOut } from "@/hooks/signOut";
 
 const Navbar = () => {
   return (
@@ -38,7 +40,7 @@ const Navbar = () => {
               <Link href="/profile">Profile</Link>
             </li>
             <li>
-              <a>Logout</a>
+              <a onClick={() => signOut({ callbackUrl: "/sign-in" })}>Logout</a>
             </li>
           </ul>
         </div>
