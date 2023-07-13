@@ -1,4 +1,5 @@
 import instance from "@/utils/BaseURL";
+import WithSession from "@/utils/HOC/uesSessionEvents";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
@@ -129,4 +130,4 @@ const ProfileComponent = () => {
   );
 };
 
-export default ProfileComponent;
+export default WithSession(ProfileComponent);

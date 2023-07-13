@@ -1,18 +1,27 @@
 import React from "react";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
     <div className="navbar bg-base-100 fixed top-0 px-4 shadow-md">
       <div className="flex-1">
-        <a className="btn btn-ghost normal-case text-xl">Blog Storm</a>
+        <Link href="/">
+          <span className="btn btn-ghost normal-case text-xl">Blog Storm</span>
+        </Link>
       </div>
       <div className="flex-none gap-2">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>Posts</a>
+            <Link href="/">Posts</Link>
           </li>
           <li>
-            <a>Create Post</a>
+            <Link href="/create-post">Create Post</Link>
+          </li>
+          <li>
+            <Link href="/sign-in">Sign In</Link>
+          </li>
+          <li>
+            <Link href="/sign-up">Sign Up</Link>
           </li>
         </ul>
         <div className="dropdown dropdown-end">
@@ -26,7 +35,7 @@ const Navbar = () => {
             className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
           >
             <li>
-              <a className="justify-between">Profile</a>
+              <Link href="/profile">Profile</Link>
             </li>
             <li>
               <a>Logout</a>
