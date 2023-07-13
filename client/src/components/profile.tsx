@@ -114,7 +114,7 @@ const ProfileComponent = () => {
             id="description"
             className="w-full bg-gray-100 px-4 py-2 rounded"
             placeholder="Enter description"
-          ></textarea>
+          />
         </div>
 
         <div className="flex justify-center">
@@ -130,4 +130,4 @@ const ProfileComponent = () => {
   );
 };
 
-export default WithSession(ProfileComponent);
+export default ProfileComponent;
