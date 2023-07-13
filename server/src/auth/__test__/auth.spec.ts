@@ -101,4 +101,20 @@ describe('AuthController', () => {
       expect(options.expires).toBeInstanceOf(Date);
     });
   });
+
+  describe('Logout', () => {
+    it('should logout and clear the authorization token', async () => {
+      const res: any = {
+        clearCookie: jest.fn().mockReturnThis(),
+        send: jest.fn().mockReturnThis(),
+      };
+
+      await authController.Logout(res);
+
+      expect(res.send).toHaveBeenCalledWith({
+        message: 'Log out successfully',
+      });
+      expect(res.clearCookie).toHaveBeenCalledWith('Authorization');
+    });
+  });
 });

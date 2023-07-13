@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDtoLogin, AuthDtoRegister } from './dto';
 import { Response } from 'express';
@@ -35,5 +42,12 @@ export class AuthController {
       })
       .status(200)
       .send({ status: 'OK' });
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async Logout(@Res() res: Response) {
+    res.clearCookie('Authorization');
+    res.send({ message: 'Log out successfully' });
   }
 }
