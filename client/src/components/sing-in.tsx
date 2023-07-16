@@ -6,7 +6,6 @@ import { signInSchema } from "@/schema/sign-in.schema";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import instance from "@/utils/BaseURL";
-import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -22,15 +21,15 @@ const SingIn = () => {
     resolver: yupResolver(signInSchema) as any,
   });
 
-  const router = useRouter();
-
   const SignInMutation = useMutation({
     mutationFn: async (formData) => {
       const { data } = await instance.post("/auth/login", formData);
       return data;
     },
     onSuccess: () => {
-      router.push("/profile");
+      if (typeof window !== "undefined") {
+        (window as Window & typeof globalThis).location.href = "/profile"!;
+      }
     },
     onError: () => {
       toast.error("Invalid credentials!");

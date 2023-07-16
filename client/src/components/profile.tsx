@@ -1,10 +1,10 @@
 import instance from "@/utils/BaseURL";
-import WithSession from "@/utils/HOC/uesSessionEvents";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import LoadingComponent from "./loading";
 
 const ProfileComponent = () => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const { data } = await instance.get("/user/me");
@@ -12,8 +12,12 @@ const ProfileComponent = () => {
     },
   });
 
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
+
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center h-screen">
       <div className="max-w-xl mx-auto bg-white p-8 border rounded shadow-md flex-grow">
         <h2 className="text-2xl font-bold mb-6">Edit Profile</h2>
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
+  return <div className="my-8 overflow-y-scroll">{children}</div>;
 };
 
 export default ProfileLayout;

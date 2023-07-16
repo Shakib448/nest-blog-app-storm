@@ -21,7 +21,7 @@ export function ReactQuery({ dehydratedState, children }: Props) {
     <>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>{children}</Hydrate>
-        {/* <ReactQueryDevtools /> */}
+        <ReactQueryDevtools />
       </QueryClientProvider>
       <Script id="react-query">
         {`window.__REACT_QUERY_STATE__ = ${JSON.stringify(dehydratedState)}`}
