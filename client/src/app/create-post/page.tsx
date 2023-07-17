@@ -1,3 +1,5 @@
+"use client";
+
 import CreatePostComponent from "@/components/createPost";
 import WithSession from "@/utils/HOC/uesSessionEvents";
 import React from "react";
