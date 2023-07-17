@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePost {
   @IsNotEmpty()
@@ -15,11 +15,11 @@ export class CreatePost {
 }
 
 export class UpdatePost {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   description: string;
 }

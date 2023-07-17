@@ -13,6 +13,7 @@ export class PostService {
         title: dto.title,
         description: dto.description,
         userId: user.id,
+        // image: dto.image,
       },
     });
 
