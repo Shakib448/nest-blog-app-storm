@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import instance from "@/utils/BaseURL";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 type Inputs = {
@@ -24,25 +23,24 @@ const SingUp = () => {
     resolver: yupResolver(signUpSchema) as any,
   });
 
-  const router = useRouter();
-
   const SignUpMutation = useMutation({
     mutationFn: async (formData) => {
       const data = await instance.post("/auth/register", formData);
       return data;
     },
+    onSuccess: () => {
+      if (typeof window !== "undefined") {
+        (window as Window & typeof globalThis).location.href = "/profile"!;
+      }
+    },
+    onError: (err: any) => {
+      console.log(err);
+      toast.error(err.response?.data?.message);
+    },
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
-    try {
-      const res: any = await SignUpMutation.mutateAsync(formData as any);
-
-      if (res) {
-        router.push("/profile");
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message);
-    }
+    await SignUpMutation.mutateAsync(formData as any);
   };
 
   return (

@@ -31,7 +31,7 @@ const SingIn = () => {
         (window as Window & typeof globalThis).location.href = "/profile"!;
       }
     },
-    onError: () => {
+    onError: (err: any) => {
       toast.error("Invalid credentials!");
     },
   });
@@ -87,7 +87,7 @@ const SingIn = () => {
             </button>
 
             <div className="mt-2 text-center">
-              <Link href="/">Not have an any account?</Link>
+              <Link href="/sign-up">Not have an any account?</Link>
             </div>
           </form>
         </div>

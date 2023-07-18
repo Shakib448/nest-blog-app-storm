@@ -1,21 +1,6 @@
-import instance from "@/utils/BaseURL";
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import LoadingComponent from "./loading";
 
 const ProfileSettings = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const { data } = await instance.get("/user/me");
-      return data;
-    },
-  });
-
-  if (isLoading) {
-    return <LoadingComponent />;
-  }
-
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="max-w-xl mx-auto bg-white p-8 border rounded shadow-md flex-grow">
