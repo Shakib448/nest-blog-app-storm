@@ -56,8 +56,7 @@ const ProfileComponent = () => {
             type="text"
             id="username"
             className="w-full bg-gray-100 px-4 py-2 rounded"
-            value={data?.username}
-            readOnly
+            defaultValue={data?.username}
           />
         </div>
 
@@ -75,42 +74,6 @@ const ProfileComponent = () => {
         </div>
 
         <div className="mb-6">
-          <label htmlFor="currentPassword" className="block font-medium mb-1">
-            Current Password
-          </label>
-          <input
-            type="password"
-            id="currentPassword"
-            className="w-full bg-gray-100 px-4 py-2 rounded"
-            placeholder="Enter current password"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="newPassword" className="block font-medium mb-1">
-            New Password
-          </label>
-          <input
-            type="password"
-            id="newPassword"
-            className="w-full bg-gray-100 px-4 py-2 rounded"
-            placeholder="Enter new password"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="newPassword" className="block font-medium mb-1">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            className="w-full bg-gray-100 px-4 py-2 rounded"
-            placeholder="Enter new password"
-          />
-        </div>
-
-        <div className="mb-6">
           <label htmlFor="description" className="block font-medium mb-1">
             Description
           </label>
@@ -118,6 +81,7 @@ const ProfileComponent = () => {
             id="description"
             className="w-full bg-gray-100 px-4 py-2 rounded"
             placeholder="Enter description"
+            rows={5}
           />
         </div>
 

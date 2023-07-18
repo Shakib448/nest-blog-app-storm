@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { signOut } from "@/hooks/signOut";
 import axios from "axios";
@@ -36,7 +36,10 @@ const Navbar = () => {
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                <img
+                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  alt="default url"
+                />
               </div>
             </label>
             <ul
@@ -48,6 +51,9 @@ const Navbar = () => {
               </li>
               <li>
                 <Link href="/create-post">Create Post</Link>
+              </li>
+              <li>
+                <Link href="/settings">Settings</Link>
               </li>
               <li>
                 <a onClick={() => signOut({ callbackUrl: "/sign-in" })}>
