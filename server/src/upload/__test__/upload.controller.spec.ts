@@ -21,17 +21,17 @@ describe('UploadController', () => {
   });
 
   it('should upload a file successfully', async () => {
-    const mockFile = {
+    const mockFile: any = {
       fieldname: 'image',
       originalname: 'test.jpg',
       encoding: '7bit',
       mimetype: 'image/jpeg',
       size: 1024,
       buffer: Buffer.from('test file'),
-      path: 'uploads/9713b88676ed17c1b8c10d3a851a7355f.jpg',
+      path: 'uploads/test.jpg',
     };
 
-    const response = await controller.FileUpdate(mockFile as any);
+    const response = await controller.FileUpdate(mockFile);
 
     expect(response).toEqual({
       url: `${config.get('BASE_URL')}/${mockFile.path}`,
