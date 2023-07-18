@@ -1,4 +1,3 @@
-import { UploadModule } from './upload/upload.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -8,14 +7,15 @@ import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      serveRoot: './public',
+      rootPath: join(__dirname, '..', '..', 'uploads'),
+      serveRoot: '/uploads',
     }),
+    ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     PrismaModule,
     UserModule,

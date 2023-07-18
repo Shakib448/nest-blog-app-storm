@@ -23,12 +23,12 @@ export class UploadController {
       new ParseFilePipe({
         validators: [
           new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-          new MaxFileSizeValidator({ maxSize: 1000 * 1024 }),
+          new MaxFileSizeValidator({ maxSize: 1.5 * 1000 * 1024 }),
         ],
       }),
     )
     image: Express.Multer.File,
   ) {
-    return `${this.config.get('BASE_URL')}/${image.path}`;
+    return { url: `${this.config.get('BASE_URL')}/${image.path}` };
   }
 }
