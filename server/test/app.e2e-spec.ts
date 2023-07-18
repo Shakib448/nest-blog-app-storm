@@ -36,8 +36,9 @@ describe('AppController (e2e)', () => {
     await prisma.cleanDb();
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     app.close();
+    await prisma.cleanDb();
   });
 
   describe('E2E testing with authentication', () => {
