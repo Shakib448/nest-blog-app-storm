@@ -18,7 +18,7 @@ export class UploadController {
 
   @Post()
   @FileUploadInterceptor('image')
-  FileUpdate(
+  async FileUpdate(
     @UploadedFile(
       new ParseFilePipe({
         validators: [
