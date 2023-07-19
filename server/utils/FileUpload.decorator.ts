@@ -1,4 +1,10 @@
-import { applyDecorators, UseInterceptors } from '@nestjs/common';
+import {
+  applyDecorators,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
