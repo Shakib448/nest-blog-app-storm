@@ -51,8 +51,8 @@ export class UserService {
 
     if (!userExits) throw new ForbiddenException('User not found!');
 
-    const updateUser = await this.prisma.profile.update({
-      where: { userId: user.id },
+    const updateUser = await this.prisma.user.update({
+      where: { id: user.id },
       data: dto,
     });
 

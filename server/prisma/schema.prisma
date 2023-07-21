@@ -14,11 +14,13 @@ model User {
   email    String @unique
   password String
 
+  image       String?
+  description String?
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   post      Post[]
   comment   Comment[]
-  Profile   Profile?
 
   @@map("users")
 }
@@ -53,19 +55,4 @@ model Comment {
   updatedAt DateTime @updatedAt
 
   @@map("comments")
-}
-
-model Profile {
-  id Int @id @default(autoincrement())
-
-  image       String?
-  description String?
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("profile")
 }
