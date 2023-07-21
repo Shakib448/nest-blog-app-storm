@@ -40,6 +40,7 @@ export class PostController {
           new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
           new MaxFileSizeValidator({ maxSize: 1.5 * 1000 * 1024 }),
         ],
+        fileIsRequired: false,
       }),
     )
     image: Express.Multer.File,
@@ -48,7 +49,7 @@ export class PostController {
   ) {
     return this.postService.CreatePost(user, {
       ...dto,
-      image: `${this.config.get('BASE_URL')}/${image.path}`,
+      image: image ? `${this.config.get('BASE_URL')}/${image.path}` : null,
     });
   }
 
@@ -67,6 +68,7 @@ export class PostController {
           new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
           new MaxFileSizeValidator({ maxSize: 1.5 * 1000 * 1024 }),
         ],
+        fileIsRequired: false,
       }),
     )
     image: Express.Multer.File,
@@ -76,7 +78,7 @@ export class PostController {
     return this.postService.UpdatePost(
       {
         ...dto,
-        image: `${this.config.get('BASE_URL')}/${image.path}`,
+        image: image ? `${this.config.get('BASE_URL')}/${image.path}` : null,
       },
       id,
     );
