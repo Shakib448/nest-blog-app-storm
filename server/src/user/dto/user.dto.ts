@@ -13,10 +13,6 @@ export class UpdateCredentials {
 export class UpdateProfile {
   @IsOptional()
   @IsString()
-  username: string;
-
-  @IsOptional()
-  @IsString()
   description: string;
 
   @IsOptional()
