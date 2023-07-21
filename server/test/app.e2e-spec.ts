@@ -17,6 +17,7 @@ describe('AppController (e2e)', () => {
   let prisma: PrismaService;
   let jwt: JwtService;
   let config: ConfigService;
+  let token: string;
 
   const imagePath = path.join(__dirname, '..', 'assets', 'test.jpg');
 
@@ -58,10 +59,12 @@ describe('AppController (e2e)', () => {
         password: 'shakib7023',
       };
 
-      await request(app.getHttpServer())
+      const res = await request(app.getHttpServer())
         .post('/auth/register')
         .send(user)
         .expect(200);
+
+      token = res.headers['set-cookie'][0].split(';')[0].split('=')[1];
     });
 
     it('Should login a user', async () => {
@@ -89,6 +92,29 @@ describe('AppController (e2e)', () => {
 
       expect(res.body.error).toBe('Forbidden');
     });
+
+    it('Should update user profile', async () => {
+      const user: AuthDtoLogin = {
+        email: 'shakiba448@gmail.com',
+        password: 'shakib7023',
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send(user)
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .patch('/user/update/profile')
+        .type('form')
+        .set('Authorization', token)
+        .field('username', 'new_user_name')
+        .field('description', 'new_user_description')
+        .attach('image', imagePath)
+        .expect(200);
+
+      expect(response.body.message).toBe('User profile updated successfully!');
+    });
   });
 
   describe('E2E testing with user', () => {
@@ -102,8 +128,6 @@ describe('AppController (e2e)', () => {
         .post('/auth/login')
         .send(user);
 
-      const token = res.headers['set-cookie'][0].split(';')[0].split('=')[1];
-
       await request(app.getHttpServer())
         .get('/user/me')
         .set('Authorization', token)
@@ -113,20 +137,6 @@ describe('AppController (e2e)', () => {
 
   describe('E2E testing with post', () => {
     it('Should create new post as an authenticate user', async () => {
-      const user: AuthDtoLogin = {
-        email: 'shakiba448@gmail.com',
-        password: 'shakib7023',
-      };
-
-      const userRes = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send(user)
-        .expect(200);
-
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
       const createPost: CreatePost = {
         title: 'The test title',
         description: 'The test description',
@@ -148,20 +158,6 @@ describe('AppController (e2e)', () => {
     });
 
     it('Should update a post as an authenticate user', async () => {
-      const user: AuthDtoLogin = {
-        email: 'shakiba448@gmail.com',
-        password: 'shakib7023',
-      };
-
-      const userRes = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send(user)
-        .expect(200);
-
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
@@ -201,20 +197,6 @@ describe('AppController (e2e)', () => {
     });
 
     it('Should delete a post as an authenticate user', async () => {
-      const user: AuthDtoLogin = {
-        email: 'shakiba448@gmail.com',
-        password: 'shakib7023',
-      };
-
-      const userRes = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send(user)
-        .expect(200);
-
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
@@ -241,20 +223,6 @@ describe('AppController (e2e)', () => {
 
   describe('E2E testing with comment', () => {
     it('Should create a new comment', async () => {
-      const user: AuthDtoLogin = {
-        email: 'shakiba448@gmail.com',
-        password: 'shakib7023',
-      };
-
-      const userRes = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send(user)
-        .expect(200);
-
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
       const { sub, username } = jwt.verify(token, {
         secret: config.get('JWT_SECRET'),
       });
@@ -302,20 +270,6 @@ describe('AppController (e2e)', () => {
     });
 
     it('Should delete a comment as an authenticate user', async () => {
-      const user: AuthDtoLogin = {
-        email: 'shakiba448@gmail.com',
-        password: 'shakib7023',
-      };
-
-      const userRes = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send(user)
-        .expect(200);
-
-      const token = userRes.headers['set-cookie'][0]
-        .split(';')[0]
-        .split('=')[1];
-
       const { sub, username } = jwt.verify(token, {
         secret: config.get('JWT_SECRET'),
       });
