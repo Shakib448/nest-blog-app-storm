@@ -44,5 +44,21 @@ export class UserService {
     return { message: 'Password changed successfully!' };
   }
 
-  async updateProfile(user: User, dto: UpdateProfile) {}
+  async updateProfile(user: User, dto: UpdateProfile) {
+    const userExits = await this.prisma.user.findUnique({
+      where: { id: user.id },
+    });
+
+    if (!userExits) throw new ForbiddenException('User not found!');
+
+    const updateUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: dto,
+    });
+
+    if (!updateUser)
+      throw new InternalServerErrorException('Internal Server Error');
+
+    return { message: 'User profile updated successfully!' };
+  }
 }

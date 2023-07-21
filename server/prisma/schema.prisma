@@ -27,7 +27,7 @@ model Post {
   id          Int     @id @default(autoincrement())
   title       String
   description String
-  image       String?
+  image       String? @default("null")
   userId      Int
   user        User    @relation(fields: [userId], references: [id])
 
@@ -58,7 +58,7 @@ model Comment {
 model Profile {
   id Int @id @default(autoincrement())
 
-  image       String?
+  image       String? @default("null")
   description String?
 
   user   User @relation(fields: [userId], references: [id])
