@@ -9,9 +9,9 @@ export class CreatePost {
   @IsString()
   description: string;
 
-  @IsNotEmpty()
-  @IsInt()
-  userId: Number;
+  @IsOptional()
+  @IsString()
+  image?: string;
 }
 
 export class UpdatePost {
@@ -22,4 +22,8 @@ export class UpdatePost {
   @IsOptional()
   @IsString()
   description: string;
+
+  @IsOptional()
+  @IsString()
+  image: string;
 }

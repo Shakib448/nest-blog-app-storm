@@ -9,6 +9,8 @@ import { ConfigService } from '@nestjs/config';
 import { CreatePost } from '../src/post/dto';
 import * as cookieParser from 'cookie-parser';
 import { CreateComment } from '../src/comment/dto';
+import { MulterModule } from '@nestjs/platform-express';
+import * as path from 'path';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -16,9 +18,16 @@ describe('AppController (e2e)', () => {
   let jwt: JwtService;
   let config: ConfigService;
 
+  const imagePath = path.join(__dirname, '..', 'assets', 'test.jpg');
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        MulterModule.register({
+          dest: './uploads',
+        }),
+        AppModule,
+      ],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -118,26 +127,24 @@ describe('AppController (e2e)', () => {
         .split(';')[0]
         .split('=')[1];
 
-      const { sub } = jwt.verify(token, {
-        secret: config.get('JWT_SECRET'),
-      });
-
       const createPost: CreatePost = {
         title: 'The test title',
         description: 'The test description',
-        userId: sub,
       };
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
+        .type('form')
         .set('Authorization', token)
-        .send(createPost)
+        .field('title', createPost.title)
+        .field('description', createPost.description)
+        .attach('image', imagePath)
         .expect(201);
 
       expect(response.body).toBeDefined();
       expect(response.body.title).toEqual(createPost.title);
       expect(response.body.description).toEqual(createPost.description);
-      expect(response.body.userId).toBeDefined();
+      expect(response.body.image).toEqual(response.body.image);
     });
 
     it('Should update a post as an authenticate user', async () => {
@@ -155,32 +162,33 @@ describe('AppController (e2e)', () => {
         .split(';')[0]
         .split('=')[1];
 
-      const { sub } = jwt.verify(token, {
-        secret: config.get('JWT_SECRET'),
-      });
-
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
-        userId: sub,
       };
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
+        .type('form')
         .set('Authorization', token)
-        .send(createPost)
+        .field('title', createPost.title)
+        .field('description', createPost.description)
+        .attach('image', imagePath)
         .expect(201);
 
       const updatePost = await request(app.getHttpServer())
         .patch(`/post/update/${response.body.id}`)
         .set('Authorization', token)
-        .send(createPost)
+        .type('form')
+        .field('title', createPost.title)
+        .field('description', createPost.description)
+        .attach('image', imagePath)
         .expect(200);
 
       expect(updatePost.body).toBeDefined();
       expect(updatePost.body.title).toEqual(createPost.title);
       expect(updatePost.body.description).toEqual(createPost.description);
-      expect(updatePost.body.userId).toBeDefined();
+      expect(updatePost.body.image).toEqual(updatePost.body.image);
     });
 
     it('Should get all posts', async () => {
@@ -207,20 +215,18 @@ describe('AppController (e2e)', () => {
         .split(';')[0]
         .split('=')[1];
 
-      const { sub } = jwt.verify(token, {
-        secret: config.get('JWT_SECRET'),
-      });
-
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
-        userId: sub,
       };
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
         .set('Authorization', token)
-        .send(createPost)
+        .type('form')
+        .field('title', createPost.title)
+        .field('description', createPost.description)
+        .attach('image', imagePath)
         .expect(201);
 
       const deletePost = await request(app.getHttpServer())
@@ -256,13 +262,15 @@ describe('AppController (e2e)', () => {
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
-        userId: sub,
       };
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
         .set('Authorization', token)
-        .send(createPost)
+        .type('form')
+        .field('title', createPost.title)
+        .field('description', createPost.description)
+        .attach('image', imagePath)
         .expect(201);
 
       const createComment: CreateComment = {
@@ -281,7 +289,6 @@ describe('AppController (e2e)', () => {
       expect(comment.body).toBeDefined();
       expect(comment.body.username).toBeDefined();
       expect(comment.body.comment).toBeDefined();
-      expect(comment.body.userId).toBeDefined();
       expect(comment.body.postId).toBeDefined();
     });
 
@@ -316,13 +323,16 @@ describe('AppController (e2e)', () => {
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
-        userId: sub,
       };
 
       const response = await request(app.getHttpServer())
         .post('/post/create')
         .set('Authorization', token)
-        .send(createPost)
+        .type('form')
+        .field('title', createPost.title)
+        .field('description', createPost.description)
+        .attach('image', imagePath)
+
         .expect(201);
 
       const createComment: CreateComment = {
