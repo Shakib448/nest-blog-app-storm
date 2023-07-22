@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { signOut } from "@/hooks/signOut";
 import axios from "axios";
+import getUser from "@/hooks/getUser";
 
 const Navbar = () => {
   const [isAuth, setIsAuth] = useState(false);
+  const { data } = getUser();
 
   (async () => {
     const { data } = await axios.get("/api/getToken");
@@ -36,10 +38,14 @@ const Navbar = () => {
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img
-                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                  alt="default url"
-                />
+                {data?.image ? (
+                  <img src={data?.image} alt={data?.username} />
+                ) : (
+                  <img
+                    src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                    alt={data?.username}
+                  />
+                )}
               </div>
             </label>
             <ul
