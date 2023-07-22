@@ -30,8 +30,8 @@ const ProfileSettings = () => {
       );
       return data;
     },
-    onError: () => {
-      toast.error("Invalid credentials");
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message);
     },
     onSuccess: () => {
       toast.success("Password updated successfully");
@@ -40,7 +40,11 @@ const ProfileSettings = () => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
-    await UpdatePassword.mutateAsync(formData as any);
+    try {
+      await UpdatePassword.mutateAsync(formData as any);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

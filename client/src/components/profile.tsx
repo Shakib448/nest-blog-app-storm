@@ -14,7 +14,8 @@ type Inputs = {
 
 const ProfileComponent = () => {
   const { data, isLoading } = getUser();
-  const { handleImageChange, imageObjectURL, imageFile } = ShowImage();
+  const { handleImageChange, imageObjectURL, imageFile, ifSelected } =
+    ShowImage();
 
   const queryClient = useQueryClient();
 
@@ -28,11 +29,11 @@ const ProfileComponent = () => {
     onSuccess: (data) => {
       toast.success(data?.message);
     },
-    onError: () => {
-      toast.error("Image should be less than 1.5mb");
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
 
@@ -60,7 +61,7 @@ const ProfileComponent = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center justify-center mb-6">
             <label htmlFor="profilePicture" className="cursor-pointer">
-              {data?.image !== null ? (
+              {!ifSelected && data?.image !== null ? (
                 <img
                   src={data?.image}
                   alt="Uploaded Image"
