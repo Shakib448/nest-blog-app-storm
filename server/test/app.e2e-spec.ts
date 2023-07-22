@@ -223,10 +223,6 @@ describe('AppController (e2e)', () => {
 
   describe('E2E testing with comment', () => {
     it('Should create a new comment', async () => {
-      const { sub } = jwt.verify(token, {
-        secret: config.get('JWT_SECRET'),
-      });
-
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
@@ -243,8 +239,6 @@ describe('AppController (e2e)', () => {
 
       const createComment: CreateComment = {
         comment: 'This is a comment',
-        userId: sub,
-        postId: response.body.id,
       };
 
       const comment = await request(app.getHttpServer())
@@ -268,10 +262,6 @@ describe('AppController (e2e)', () => {
     });
 
     it('Should delete a comment as an authenticate user', async () => {
-      const { sub } = jwt.verify(token, {
-        secret: config.get('JWT_SECRET'),
-      });
-
       const createPost: CreatePost = {
         title: 'The test title updated',
         description: 'The test description updated',
@@ -289,8 +279,6 @@ describe('AppController (e2e)', () => {
 
       const createComment: CreateComment = {
         comment: 'This is a comment',
-        userId: sub,
-        postId: response.body.id,
       };
 
       const comment = await request(app.getHttpServer())
