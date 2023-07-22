@@ -26,7 +26,7 @@ export class PostService {
         user: {
           select: {
             username: true,
-            email: true,
+            image: true,
           },
         },
         comment: true,

@@ -14,7 +14,6 @@ export class CommentService {
 
     const newComment = await this.prisma.comment.create({
       data: {
-        username: user.username,
         comment: dto.comment,
         postId: postExits.id,
         userId: user.id,

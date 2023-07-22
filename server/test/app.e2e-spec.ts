@@ -242,7 +242,6 @@ describe('AppController (e2e)', () => {
         .expect(201);
 
       const createComment: CreateComment = {
-        username,
         comment: 'This is a comment',
         userId: sub,
         postId: response.body.id,
@@ -255,7 +254,6 @@ describe('AppController (e2e)', () => {
         .expect(201);
 
       expect(comment.body).toBeDefined();
-      expect(comment.body.username).toBeDefined();
       expect(comment.body.comment).toBeDefined();
       expect(comment.body.postId).toBeDefined();
     });
@@ -290,7 +288,6 @@ describe('AppController (e2e)', () => {
         .expect(201);
 
       const createComment: CreateComment = {
-        username,
         comment: 'This is a comment',
         userId: sub,
         postId: response.body.id,

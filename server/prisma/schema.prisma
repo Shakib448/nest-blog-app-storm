@@ -43,8 +43,7 @@ model Post {
 model Comment {
   id Int @id @default(autoincrement())
 
-  username String
-  comment  String
+  comment String
 
   postId Int
   post   Post @relation(fields: [postId], references: [id])
