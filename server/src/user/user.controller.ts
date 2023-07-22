@@ -52,7 +52,9 @@ export class UserController {
   ) {
     return this.userService.updateProfile(user, {
       ...dto,
-      image: image ? `${this.config.get('BASE_URL')}/${image.path}` : null,
+      image: image
+        ? `${this.config.get('BASE_URL')}/${image.path}`
+        : user.image,
     });
   }
 }
