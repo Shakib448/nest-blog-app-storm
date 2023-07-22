@@ -12,3 +12,15 @@ export const signUpSchema = yup
       .label("Confirm Password"),
   })
   .required();
+
+export const UpdateCredentials = yup
+  .object({
+    currentPassword: yup.string().required().label("Current Password"),
+    newPassword: yup.string().min(8).label("newPassword").required(),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("newPassword"), null as any], "Passwords must match")
+      .required()
+      .label("Confirm Password"),
+  })
+  .required();
