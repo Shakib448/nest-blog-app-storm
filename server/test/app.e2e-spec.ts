@@ -223,7 +223,7 @@ describe('AppController (e2e)', () => {
 
   describe('E2E testing with comment', () => {
     it('Should create a new comment', async () => {
-      const { sub, username } = jwt.verify(token, {
+      const { sub } = jwt.verify(token, {
         secret: config.get('JWT_SECRET'),
       });
 
@@ -268,7 +268,7 @@ describe('AppController (e2e)', () => {
     });
 
     it('Should delete a comment as an authenticate user', async () => {
-      const { sub, username } = jwt.verify(token, {
+      const { sub } = jwt.verify(token, {
         secret: config.get('JWT_SECRET'),
       });
 

@@ -24,9 +24,12 @@ export class CommentService {
   }
 
   async GetComment() {
-    return await this.prisma.comment.findMany({
-      include: { user: { select: { id: true, username: true } } },
+    const data = await this.prisma.comment.findMany({
+      include: { user: { select: { id: true, username: true, image: true } } },
+      orderBy: { createdAt: 'desc' },
     });
+
+    return data;
   }
 
   async DeleteComment(user: User, id: number) {

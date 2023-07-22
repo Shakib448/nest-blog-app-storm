@@ -25,7 +25,7 @@ export class UserService {
     );
 
     if (!passwordMatch) {
-      throw new ForbiddenException('Current Password does not match!');
+      throw new ForbiddenException('Current password does not match!');
     }
 
     const salt = bcrypt.genSaltSync(10);

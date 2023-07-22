@@ -29,7 +29,16 @@ export class PostService {
             image: true,
           },
         },
-        comment: true,
+        comment: {
+          include: {
+            user: {
+              select: { username: true, image: true },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
       },
     });
 
