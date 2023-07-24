@@ -2,7 +2,7 @@
 
 import instance from "@/utils/BaseURL";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -22,7 +22,7 @@ interface Inputs {
 }
 
 interface Blog {
-  item: any;
+  item?: any;
   userImage?: string;
   username?: string;
   imageUrl?: string;
@@ -46,6 +46,8 @@ const BlogCard = ({
 
   const { register, handleSubmit, reset } = useForm<Inputs>();
 
+  console.log(item);
+
   const CommentMutation = useMutation({
     mutationFn: async (formData) => {
       const { data } = await instance.post(
@@ -63,6 +65,7 @@ const BlogCard = ({
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post"] });
     },
   });
 
@@ -77,26 +80,30 @@ const BlogCard = ({
 
   return (
     <div className="max-w-xl mx-auto rounded-lg cursor-pointer shadow-lg">
-      <div className="flex items-center p-4">
-        <img
-          src={userImage}
-          alt={username}
-          className="w-10 h-10 rounded-full mr-4"
-        />
+      <Link href={`/post/${item.id}`}>
+        <div className="flex items-center p-4">
+          <img
+            src={userImage}
+            alt={username}
+            className="w-10 h-10 rounded-full mr-4"
+          />
 
-        <div style={{ marginLeft: "10px" }}>{username}</div>
-      </div>
-      <Image
-        src={imageUrl}
-        alt="Blog"
-        className="w-full h-28 object-cover"
-        width={100}
-        height={100}
-      />
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-2">{title}</h2>
-        <p>{description}</p>
-      </div>
+          <div style={{ marginLeft: "10px" }}>{username}</div>
+        </div>
+
+        <div className="h-64">
+          <img
+            src={imageUrl}
+            alt="Blog"
+            style={{ height: "400px", width: "100%" }}
+          />
+        </div>
+        <div className="p-4">
+          <h2 className="text-xl font-bold mb-2">{title}</h2>
+          <p>{description}</p>
+        </div>
+      </Link>
+
       <div className="p-4 bg-gray-100">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-2">
