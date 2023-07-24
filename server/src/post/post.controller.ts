@@ -58,6 +58,11 @@ export class PostController {
     return this.postService.GetPosts();
   }
 
+  @Get(':id')
+  GetPostById(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.GetPostById(id);
+  }
+
   @UseGuards(JwtGuard)
   @Patch('update/:id')
   @FileUploadInterceptor('image')

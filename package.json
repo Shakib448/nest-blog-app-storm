@@ -4,5 +4,8 @@
   },
   "scripts": {
     "prepare": "husky install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.0"
   }
 }

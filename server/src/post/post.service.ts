@@ -45,6 +45,36 @@ export class PostService {
     return posts;
   }
 
+  async GetPostById(id: number) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            username: true,
+            image: true,
+          },
+        },
+        comment: {
+          include: {
+            user: {
+              select: { username: true, image: true },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
+
+    if (!post) {
+      throw new ForbiddenException('Post not found');
+    }
+
+    return post;
+  }
+
   async UpdatePost(dto: UpdatePost, id: number) {
     const updatePost = await this.prisma.post.update({
       where: { id },

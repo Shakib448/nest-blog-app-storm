@@ -60,6 +60,17 @@ describe('PostController', () => {
     expect(service.GetPosts).toHaveBeenCalled();
   });
 
+  it('should return a single of post', async () => {
+    const post: any = { id: 1, title: 'Post 1', description: 'Description 1' };
+
+    jest.spyOn(service, 'GetPostById').mockResolvedValue(post);
+
+    const result = await controller.GetPostById(post.id);
+
+    expect(result).toEqual(post);
+    expect(service.GetPostById).toHaveBeenCalled();
+  });
+
   it('should update a post', async () => {
     const postId = 1;
     const updatedPost: any = {

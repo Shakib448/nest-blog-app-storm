@@ -187,6 +187,19 @@ describe('AppController (e2e)', () => {
       expect(updatePost.body.image).toEqual(updatePost.body.image);
     });
 
+    it('Should get single post', async () => {
+      const getPosts = await request(app.getHttpServer())
+        .get('/post')
+        .expect(200);
+
+      const singlePost = await request(app.getHttpServer())
+        .get(`/post/${getPosts.body[0].id}`)
+        .expect(200);
+
+      expect(getPosts.body).toBeDefined();
+      expect(typeof getPosts.body).toBe('object');
+    });
+
     it('Should get all posts', async () => {
       const getPosts = await request(app.getHttpServer())
         .get('/post')
