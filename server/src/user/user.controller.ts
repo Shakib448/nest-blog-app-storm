@@ -1,9 +1,7 @@
 import {
   Body,
   Controller,
-  FileTypeValidator,
   Get,
-  MaxFileSizeValidator,
   ParseFilePipe,
   Patch,
   UploadedFile,
@@ -16,6 +14,7 @@ import { UserService } from './user.service';
 import { UpdateCredentials, UpdateProfile } from './dto';
 import { FileUploadInterceptor } from '../../utils/FileUpload.decorator';
 import { ConfigService } from '@nestjs/config';
+import { ImageValidator } from '../../utils/Image.validator';
 @UseGuards(JwtGuard)
 @Controller('user')
 export class UserController {
@@ -37,15 +36,7 @@ export class UserController {
   @Patch('update/profile')
   @FileUploadInterceptor('image')
   updateProfile(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-          new MaxFileSizeValidator({ maxSize: 1.5 * 1000 * 1024 }),
-        ],
-        fileIsRequired: false,
-      }),
-    )
+    @UploadedFile(new ParseFilePipe(ImageValidator))
     image: Express.Multer.File,
     @GetUser() user: User,
     @Body() dto: UpdateProfile,

@@ -22,6 +22,7 @@ import { GetUser } from '../auth/decorator';
 import { User } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { FileUploadInterceptor } from '../../utils/FileUpload.decorator';
+import { ImageValidator } from '../../utils/Image.validator';
 
 @Controller('post')
 export class PostController {
@@ -34,15 +35,7 @@ export class PostController {
   @Post('create')
   @FileUploadInterceptor('image')
   CreatePost(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-          new MaxFileSizeValidator({ maxSize: 1.5 * 1000 * 1024 }),
-        ],
-        fileIsRequired: false,
-      }),
-    )
+    @UploadedFile(new ParseFilePipe(ImageValidator))
     image: Express.Multer.File,
     @GetUser() user: User,
     @Body() dto: CreatePost,
@@ -67,15 +60,7 @@ export class PostController {
   @Patch('update/:id')
   @FileUploadInterceptor('image')
   UpdatePost(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-          new MaxFileSizeValidator({ maxSize: 1.5 * 1000 * 1024 }),
-        ],
-        fileIsRequired: false,
-      }),
-    )
+    @UploadedFile(new ParseFilePipe(ImageValidator))
     image: Express.Multer.File,
     @Body() dto: UpdatePost,
     @Param('id', ParseIntPipe) id: number,
@@ -83,7 +68,7 @@ export class PostController {
     return this.postService.UpdatePost(
       {
         ...dto,
-        image: image ? `${this.config.get('BASE_URL')}/${image.path}` : null,
+        image: image && `${this.config.get('BASE_URL')}/${image.path}`,
       },
       id,
     );

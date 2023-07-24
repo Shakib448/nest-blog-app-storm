@@ -11,8 +11,9 @@ type Inputs = {
   description: string;
 };
 
-const CreatePostComponent = () => {
-  const { handleImageChange, imageObjectURL, imageFile } = ShowImage();
+const CreatePostComponent = ({ item }: { item?: any }) => {
+  const { handleImageChange, imageObjectURL, imageFile, ifSelected } =
+    ShowImage();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -36,14 +37,39 @@ const CreatePostComponent = () => {
     },
   });
 
+  const UpdatePostMutation = useMutation({
+    mutationFn: async (formData) => {
+      const { data } = await instance.patch(
+        `/post/update/${item.id}`,
+        formData
+      );
+      return data;
+    },
+    onError: (err: any) => {
+      toast.error(err?.response?.data.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data?.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      router.push("/");
+    },
+  });
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
-    formData.append("image", imageFile as any);
+    formData.append("image", ifSelected ? (imageFile as any) : item?.image);
 
     try {
-      await CreatePost.mutateAsync(formData as any);
+      if (item) {
+        await UpdatePostMutation.mutateAsync(formData as any);
+      } else {
+        await CreatePost.mutateAsync(formData as any);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +82,13 @@ const CreatePostComponent = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-6">
             <label htmlFor="profilePicture" className="cursor-pointer">
-              {imageObjectURL ? (
+              {!ifSelected && item?.image !== null ? (
+                <img
+                  src={item?.image}
+                  alt="Uploaded Image"
+                  className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center"
+                />
+              ) : imageObjectURL ? (
                 <img
                   src={imageObjectURL}
                   alt="Uploaded Image"
@@ -98,6 +130,7 @@ const CreatePostComponent = () => {
               id="title"
               className="w-full bg-gray-100 px-4 py-2 rounded"
               placeholder="Enter the title"
+              defaultValue={item?.title}
               {...register("title")}
             />
           </div>
@@ -111,8 +144,9 @@ const CreatePostComponent = () => {
               className="w-full bg-gray-100 px-4 py-2 rounded"
               placeholder="Enter the description"
               {...register("description")}
+              defaultValue={item?.description}
               rows={5}
-            ></textarea>
+            />
           </div>
 
           <div className="flex justify-center">
@@ -120,7 +154,7 @@ const CreatePostComponent = () => {
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded"
             >
-              Create Post
+              {!item ? "Create Post" : "Update Post"}
             </button>
           </div>
         </form>

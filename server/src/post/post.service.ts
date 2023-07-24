@@ -32,7 +32,7 @@ export class PostService {
         comment: {
           include: {
             user: {
-              select: { username: true, image: true },
+              select: { id: true, username: true, image: true },
             },
           },
           orderBy: {
@@ -58,7 +58,7 @@ export class PostService {
         comment: {
           include: {
             user: {
-              select: { username: true, image: true },
+              select: { id: true, username: true, image: true },
             },
           },
           orderBy: {

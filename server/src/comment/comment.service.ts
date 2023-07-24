@@ -28,7 +28,6 @@ export class CommentService {
       include: { user: { select: { id: true, username: true, image: true } } },
       orderBy: { createdAt: 'desc' },
     });
-
     return data;
   }
 
