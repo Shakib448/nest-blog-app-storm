@@ -24,6 +24,23 @@ JWT_SECRET="Supersecret"
 BASE_URL=http://localhost:8000
 ```
 
+## Client Setup
+
+```bash
+cd client
+npm install
+```
+
+## Server Setup
+
+```bash
+cd server
+npm install
+# Start the Docker containers
+docker compose up
+# This command starts the Docker containers to run the database and server.
+```
+
 ## Thanks
 
 # Hire Me
