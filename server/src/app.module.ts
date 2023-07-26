@@ -7,6 +7,7 @@ import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     UserModule,
     PostModule,
     CommentModule,
+    SeedModule,
   ],
 })
 export class AppModule {}
