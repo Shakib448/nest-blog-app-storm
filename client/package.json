@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^4.29.9",
+    "cypress": "^12.17.2",
     "daisyui": "^3.2.1"
   }
 }
