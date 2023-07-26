@@ -3,7 +3,10 @@
     "husky": "^8.0.3"
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "client": "npm run dev --prefix ./client",
+    "server": "npm run start:dev --prefix ./server",
+    "start:dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "dependencies": {
     "concurrently": "^8.2.0"
