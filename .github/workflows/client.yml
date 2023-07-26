@@ -24,6 +24,6 @@ jobs:
         with:
           working-directory: client
           install: false
-          start: npm run dev
+          start: npm run cy:run
           wait-on: "http://localhost:3000"
           parallel: true
