@@ -32,12 +32,16 @@ const SingIn = () => {
       }
     },
     onError: (err: any) => {
-      toast.error("Invalid credentials!");
+      toast.error(err?.response?.data?.message);
     },
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
-    await SignInMutation.mutateAsync(formData as any);
+    try {
+      await SignInMutation.mutateAsync(formData as any);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

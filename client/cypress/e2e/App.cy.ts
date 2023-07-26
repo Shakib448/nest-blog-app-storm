@@ -1,12 +1,7 @@
 // @ts-nocheck
 
 describe("Testing application", () => {
-  beforeEach(() => {
-    cy.visit("/");
-    // cy.login("shakib@gmail.com", "muktadir_shakib");
-  });
-
-  afterEach(() => {
+  before(() => {
     cy.request({
       method: "POST",
       url: "http://localhost:8000/api/seed",
@@ -14,6 +9,8 @@ describe("Testing application", () => {
   });
 
   it("Home page Testing", () => {
+    cy.visit("/");
+
     cy.get(".bg-white").should("contain", "No post available");
     cy.get(".text-gray-600").should(
       "contain",
@@ -50,6 +47,8 @@ describe("Testing application", () => {
   });
 
   it("Should update the profile", () => {
+    cy.login("shakib@gmail.com", "muktadir_shakib");
+
     cy.visit("/profile");
 
     cy.get('input[type="file"]').selectFile("assets/error.jpg", {
@@ -75,6 +74,90 @@ describe("Testing application", () => {
   });
 
   it("Should create a new post", () => {
-    cy.get(".w-10 > img").click("center");
+    cy.login("shakib@gmail.com", "muktadir_shakib");
+
+    cy.visit("/create-post");
+
+    cy.get('input[type="file"]').selectFile("assets/error.jpg", {
+      force: true,
+    });
+
+    cy.get("#title").type("this is title");
+    cy.get("#description").type("this is description");
+    cy.get(".bg-blue-500").click("center");
+
+    cy.get(".Toastify__toast-body > :nth-child(2)").should(
+      "contain",
+      "File size must be less than 1.5MB"
+    );
+
+    cy.get('input[type="file"]').selectFile("assets/post.jpg", {
+      force: true,
+    });
+    cy.get(".bg-blue-500").click("center");
+
+    cy.get(".Toastify__toast-body").should("be.visible");
+  });
+
+  it("Should get the post", () => {
+    cy.login("shakib@gmail.com", "muktadir_shakib");
+    cy.visit("/");
+    cy.get(".flex-grow").type("this is comment");
+    cy.get(".bg-blue-500").click("center");
+    cy.get(".flex-grow").type("this is comment2");
+    cy.get(".bg-blue-500").click("center");
+    cy.get(".text-blue-500").click("center");
+    cy.get(".Toastify__toast-body > :nth-child(2)").should("be.visible");
+    cy.get(':nth-child(1) > [style="margin-left: 20px;"] > .btn').click(
+      "center"
+    );
+    cy.get(".Toastify__toast-body > :nth-child(2)").should("be.visible");
+    cy.get(".bg-gray-200 > :nth-child(1) > a").click("center");
+
+    cy.get('input[type="file"]').selectFile("assets/profile.jpg", {
+      force: true,
+    });
+
+    cy.get("#title").clear();
+    cy.get("#title").type("Update title");
+    cy.get("#description").clear();
+    cy.get("#description").type("Update Description");
+
+    cy.get(".bg-blue-500").click("center");
+    cy.get(".text-blue-500").click("center");
+    cy.get(".bg-blue-500").click("center");
+    cy.get(".h-64 > img").click("center");
+    cy.visit("/");
+    cy.get(".flex > p").click("center");
+  });
+
+  it("Should Update the password", () => {
+    cy.login("shakib@gmail.com", "muktadir_shakib");
+    cy.visit("/settings");
+    cy.get("#currentPassword").type("shakib7023");
+    cy.get("#newPassword").type("shakib7023");
+    cy.get("#confirmPassword").type("shakib7023");
+
+    cy.get(".bg-blue-500").click("center");
+    cy.get(".Toastify__toast-body > :nth-child(2)").should("be.visible");
+    cy.get("#currentPassword").clear();
+    cy.get("#currentPassword").type("muktadir_shakib");
+    cy.get(".bg-blue-500").click("center");
+  });
+
+  it("Should login with new password", () => {
+    cy.visit("/sign-in");
+    cy.get("#email").type("shakib@gmail.com");
+    cy.get("#password").type("muktadir_shakib");
+    cy.get(".bg-blue-500").click("center");
+
+    cy.get(".Toastify__toast-body > :nth-child(2)").should(
+      "contain",
+      "Incorrect password written!"
+    );
+    cy.get("#password").clear();
+    cy.get("#password").type("shakib7023");
+    cy.get(".bg-blue-500").click("center");
+    cy.visit("/");
   });
 });

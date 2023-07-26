@@ -1,4 +1,11 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd server && npm run test && npm run test:e2e && npm run db:dev:restart
+# Run Cypress tests in the client
+cd client && npm run cy:run
+
+# Run tests in the server (unit tests, e2e tests, etc.)
+cd ../server
+npm run test
+npm run test:e2e
+npm run db:dev:restart
