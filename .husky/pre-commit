@@ -7,3 +7,4 @@ cd ../server
 npm run test
 npm run test:e2e
 npm run db:dev:restart
+rm -rf uploads
