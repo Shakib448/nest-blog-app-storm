@@ -41,7 +41,7 @@ docker compose up
 # This command starts the Docker containers to run the database and server.
 ```
 
-## Run Development Server for running both client and server together
+## Run development sever together
 
 Go to outside client and server
 
@@ -56,10 +56,10 @@ Go to outside client and server
     npm run start:dev
 ```
 
-## Thanks
-
 ## Hire Me
 
 If you are interested in collaborating or need any assistance, feel free to reach out to me at:
 
 📧 Email: shakiba448@gmail.com
+
+Thanks
