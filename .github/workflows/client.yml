@@ -1,0 +1,27 @@
+name: CLIENT
+
+on: push
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download the build folder
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          record: false
+          parallel: true
+          start: npm run cy:run
