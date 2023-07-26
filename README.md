@@ -46,14 +46,14 @@ docker compose up
 Go to outside client and server
 
 ```bash
-    #if you inside client
-    #if you inside server
-    cd ..
+#if you inside client
+#if you inside server
+cd ..
 ```
 
 ```bash
-    npm install
-    npm run start:dev
+npm install
+npm run start:dev
 ```
 
 ## Hire Me
